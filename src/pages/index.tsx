@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
+import { useSession, signIn, signOut } from "next-auth/react";
 import styles from '@/styles/Home.module.css';
 import Dashboard from './dashboard';
 import Header from '@/components/Header/Header';
@@ -9,6 +10,8 @@ import Login from './login';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <>
       <Head>
@@ -19,9 +22,15 @@ export default function Home() {
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <Header />
-        <SideMenu />
-        <Dashboard />
-        <Login />
+        {
+          session && (
+            <>
+              <SideMenu />
+              <Dashboard />
+            </>
+          )
+        }
+        <Login/>
       </main>
     </>
   )
