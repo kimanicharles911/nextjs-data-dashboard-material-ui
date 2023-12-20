@@ -1,0 +1,16 @@
+To create this app as in https://youtu.be/E9BYc5_etOk?si=TpIFBpRnsB4219Uf
+run: npx create-next-app && cd myApp && npm i -S next@13.2.4
+
+yarn add @mui/material @emotion/react @emotion/styled
+
+yarn add next-auth@4.20.1
+
+yarn add @mui/icons-material@5.11.11
+
+
+
+yarn add 
+
+
+
+
