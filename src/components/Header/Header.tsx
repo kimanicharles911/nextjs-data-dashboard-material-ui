@@ -13,15 +13,23 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import ThemeToggleButton from "../ThemeToggleButton/ThemeToggleButton";
+import { useMediaQuery } from "@mui/material";
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const Header = () => {
+export type HeaderProps = {
+  ColorModeContext: React.Context<{ toggleColorMode: () => void; }>;
+}
+
+const Header = (props: HeaderProps) => {
+  const { ColorModeContext } = props;
   const { data: session } = useSession();
   const avatarUrl = session?.user?.image;
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const tabletCheck = useMediaQuery('(min-width: 768px)');
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -44,7 +52,7 @@ const Header = () => {
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography variant="h6" noWrap component="a" href="#app-bar-with-responsive-menu" sx={{ mr: 2, display: { xs: 'none', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem', color: 'inherit', textDecoration: 'none',}}>
-            LOGO
+            DataSoft
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -61,7 +69,7 @@ const Header = () => {
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography variant="h5" noWrap component="a" href="#app-bar-with-responsive-menu" sx={{ mr: 2, display: { xs: 'flex', md: 'none' }, flexGrow: 1, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem', color: 'inherit', textDecoration: 'none', }} >
-            LOGO
+            DataSoft
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -70,10 +78,14 @@ const Header = () => {
               </Button>
             ))}
           </Box>
-
-          <Box sx={{ paddingRight: 5 }}>
-              <Typography>Signed in as {session?.user?.email}</Typography>
-            </Box>
+          {
+            tabletCheck && (
+              <Box sx={{ paddingRight: 5 }}>
+                <Typography>Signed in as {session?.user?.email}</Typography>
+              </Box>
+            )
+          }
+          <ThemeToggleButton ColorModeContext={ColorModeContext}/>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open profile settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

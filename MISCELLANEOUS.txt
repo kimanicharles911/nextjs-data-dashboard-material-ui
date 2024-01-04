@@ -7,6 +7,11 @@ yarn add next-auth@4.20.1
 
 yarn add @mui/icons-material@5.11.11
 
+yarn add sass
+
+npx sb init
+
+yarn add -D storybook-dark-mode
 
 
 yarn add 
