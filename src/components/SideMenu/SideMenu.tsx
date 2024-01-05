@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
+import NextLink from "next/link";
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -19,6 +20,13 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { useMediaQuery } from '@mui/material';
+import { Settings } from '@mui/icons-material';
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import Person2Icon from "@mui/icons-material/Person2";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+import HomeIcon from '@mui/icons-material/Home';
+import { signOut } from "next-auth/react";
+import scss from './SideMenu.module.scss';
 
 const drawerWidth = 240;
 
@@ -52,6 +60,10 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   // ...theme.mixins.toolbar,
 }));
 
+const menuRouteList = ["analytics", "profile", "settings", ""];
+const menuListTranslations = ["Data", "Profile", "Settings", "Sign Out"];
+const menuListIcons = [<EqualizerIcon />, <Person2Icon />, <Settings />, <ExitToAppIcon />];
+
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
   }),
@@ -70,12 +82,17 @@ const SideMenu = () => {
     setOpen(!open);
   };
 
+  const handleListItemButtonClick = (text: string) => {
+    text === 'Sign Out' ? signOut() : null;
+    setOpen(false);
+  };
+
   return (
     <Drawer variant="permanent" open={open} anchor='left' sx={{ 
       width: drawerWidth,
       [`& .MuiDrawer-paper`]: {
         left: 0,
-        top: mobileCheck ? 64 : 57,
+        top: mobileCheck ? 69 : 57,
         flexShrink: 0,
         whiteSpace: "nowrap",
         boxSizing: "border-box",
@@ -95,32 +112,22 @@ const SideMenu = () => {
       </DrawerHeader>
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+        {menuListTranslations.map((text, index) => (
           <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : 'auto',
-                  justifyContent: 'center',
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            <NextLink className={scss.link} href={`/dashboard/${menuRouteList[index]}`}>
+            <ListItemButton onClick={() => handleListItemButtonClick(text)} sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }} title={text} aria-label={text}>
+              <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center'}}>
+                {menuListIcons[index]}
               </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText primary={text} sx={{ color: theme.palette.text.primary, opacity: open ? 1 : 0 }} />
             </ListItemButton>
+            </NextLink>
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
           <ListItem key={text} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
               sx={{
