@@ -13,6 +13,9 @@ npx sb init
 
 yarn add -D storybook-dark-mode
 
+yarn add chart.js @types/chart.js @mui/x-data-grid @mui/x-data-grid-generator
+
+
 
 yarn add 
 
